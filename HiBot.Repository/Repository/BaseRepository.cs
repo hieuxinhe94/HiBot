@@ -36,6 +36,7 @@ namespace HiBot.Repository
         public int Add(T entity)
         {
             this.ObjectSet.AddObject(entity);
+            
             return 1;
         }
 
