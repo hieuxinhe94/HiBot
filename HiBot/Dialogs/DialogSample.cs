@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
 namespace HiBot.Dialogs
 {
-    [Serializable]
+     
     public class DialogSample
     {
         private const string FlightsOption = "Flights";

@@ -2,14 +2,9 @@
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
-using HiBot.Business.Infrastructures;
-using HiBot.Business.Interfaces;
 using HiBot.Dialogs;
-using HiBot.Repository;
-using Microsoft.Bot.Builder.Dialogs;
+using HiBot.Midware;
 using Microsoft.Bot.Builder.Dialogs.Internals;
-using Microsoft.Bot.Builder.Internals.Fibers;
-using Microsoft.Bot.Connector;
 
 namespace HiBot
 {
@@ -19,18 +14,20 @@ namespace HiBot
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
-            //var uri = new Uri(ConfigurationManager.AppSettings["DocumentDbUrl"]);
-            //var key = ConfigurationManager.AppSettings["DocumentDbKey"];
-            //var store = new DocumentDbBotDataStore(uri, key);
-
+          
             var config = GlobalConfiguration.Configuration;
 
 
             // dependency injection
             ContainerBuilder builder = new ContainerBuilder();
             builder.RegisterModule(new DialogModule());
-
             builder.RegisterModule(new HiBotModule());
+
+            builder
+                .RegisterType<RootDialog>()
+                .InstancePerDependency();
+
+           
             // Register your Web API controllers.
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
             // OPTIONAL: Register the Autofac filter provider.
@@ -39,7 +36,8 @@ namespace HiBot
             var container = builder.Build();
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
-
+            ServiceResolver.Container = container;
+   
         }
         public static ILifetimeScope FindContainer()
         {

@@ -18,17 +18,17 @@ namespace HiBot
             
             builder.RegisterType<RootDialog>().As<IDialog<object>>().InstancePerDependency();
 
-       //     builder.RegisterType<RootDialog>().InstancePerDependency();
+            //     builder.RegisterType<RootDialog>().InstancePerDependency();
 
-            //builder.RegisterType<StudentBusiness>()
-            //    .Keyed<IStudentBusiness>(FiberModule.Key_DoNotSerialize)
-            //    .AsImplementedInterfaces()
-            //    .SingleInstance();
+            builder.RegisterType<StudentBusiness>()
+                .Keyed<IStudentBusiness>(FiberModule.Key_DoNotSerialize)
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
-            //builder.RegisterType<StudentRepository>()
-            //    .Keyed<IRepository<Students>>(FiberModule.Key_DoNotSerialize)
-            //    .AsImplementedInterfaces()
-            //    .SingleInstance();
+            builder.RegisterType<StudentRepository>()
+                .Keyed<IRepository<Students>>(FiberModule.Key_DoNotSerialize)
+                .AsImplementedInterfaces()
+                .SingleInstance();
             base.Load(builder);
         }
     }

@@ -16,10 +16,14 @@ namespace HiBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        readonly RootDialog rootDialog;
+
         private readonly ILifetimeScope _scope;
-        public MessagesController(ILifetimeScope scope)
+        
+        public MessagesController(
+            RootDialog rootDialog)
         {
-            SetField.NotNull(out this._scope, nameof(_scope), scope);
+            this.rootDialog = rootDialog;
         }
         /// <summary>
         /// POST: api/Messages
@@ -32,15 +36,8 @@ namespace HiBot
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, activity))
-                {
-                    //Func<IDialog<object>> makeRoot = () => _scope.Resolve<RootDialog>();
-                    //_scope.Resolve<Func<IDialog<object>>>(TypedParameter.From(makeRoot));
-                    //var postToBot = _scope.Resolve<IPostToBot>();
-                    //await postToBot.PostAsync(activity, token);
-                    var postToBot = scope.Resolve<IPostToBot>();
-                    await postToBot.PostAsync(activity, token);
-                }
+                await Conversation.SendAsync(activity, () => this.rootDialog);
+              
             }
             else
             {

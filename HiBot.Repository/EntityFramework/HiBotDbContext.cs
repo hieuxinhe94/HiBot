@@ -5,7 +5,7 @@ using HiBot.Entities;
 
 namespace HiBot.Repository.EntityFramework
 {
-   [Serializable]
+    
     public class HiBotDbContext : DbContext
     {
         public HiBotDbContext() : base(@"data source=localhost\SQLEXPRESS;
@@ -13,7 +13,8 @@ namespace HiBot.Repository.EntityFramework
         User=sa;
         Password=12345678;")
         {
-
+            // the terrible hack
+            var ensureDLLIsCopied = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

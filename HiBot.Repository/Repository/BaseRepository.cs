@@ -15,7 +15,7 @@ namespace HiBot.Repository
     [Serializable]
     public class BaseRepository<T> : IRepository<T> where T : BaseEntities
     {
-       
+
         #region Fields
         private readonly HiBotDbContext _context;
         private DbSet<T> _entities;
@@ -64,7 +64,7 @@ namespace HiBot.Repository
 
         public BaseRepository()
         {
-            _context = _context ??   new HiBotDbContext();
+            _context = _context ?? new HiBotDbContext();
         }
 
 
@@ -83,12 +83,11 @@ namespace HiBot.Repository
                     throw new ArgumentNullException("entity");
 
                 this.Entities.Add(entity);
-
                 this._context.SaveChanges();
             }
             catch (DbUpdateException dbEx)
             {
-                _context.RollBack();
+                //context.RollBack();
                 Console.WriteLine(dbEx.Message);
                 throw;
             }
@@ -101,7 +100,7 @@ namespace HiBot.Repository
                 if (entities == null)
                     throw new ArgumentNullException("entities");
 
-                    this.Entities.AddRange(entities);
+                this.Entities.AddRange(entities);
 
                 this._context.SaveChanges();
             }
@@ -191,10 +190,10 @@ namespace HiBot.Repository
 
         public IQueryable<T> FromSql(string sql, params object[] parameters)
         {
-            return this.Entities.SqlQuery(sql,parameters).AsQueryable();
+            return this.Entities.SqlQuery(sql, parameters).AsQueryable();
         }
 
- 
+
         public IList<T> GetAll(Expression<Func<T, bool>> whereCondition)
         {
             return this.Entities.Where(whereCondition).ToList();
