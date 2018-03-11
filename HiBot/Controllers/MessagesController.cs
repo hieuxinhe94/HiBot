@@ -37,9 +37,8 @@ namespace HiBot
         {
             if (activity.Type == ActivityTypes.Message)
             {
-
+                // first time call to root dialog, and this will be display options to start 
                 await Conversation.SendAsync(activity, () => this.rootDialog);
-               
             }   
             else
             {
@@ -75,16 +74,14 @@ namespace HiBot
 
                             var reply = message.CreateReply();
                             reply.Attachments = new List<Attachment>{attachment};
-                            reply.Text = $"Welcome {newMember.Name} are chatting with Hibot!";
+                            reply.Text = $"Welcome {newMember.Name} is chatting with Hibot !\n";
                             reply.Speak = "Hello";
                             client.Conversations.ReplyToActivityAsync(reply);
                         }
                     }
                 }
 
-                //ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
-                //Activity reply = message.CreateReply("Hello from my simple Bot!");
-                //connector.Conversations.ReplyToActivityAsync(reply);
+               
 
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)

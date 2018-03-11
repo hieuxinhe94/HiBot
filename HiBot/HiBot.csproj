@@ -128,7 +128,9 @@
     <Compile Include="Constants\HiBotOptions.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\DialogSample.cs" />
-    <Compile Include="Dialogs\RootDialog.cs" />
+    <Compile Include="Dialogs\Help\HelpDialog.cs" />
+    <Compile Include="Dialogs\Common\IntroduceDialog.cs" />
+    <Compile Include="Dialogs\Common\RootDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -146,7 +148,11 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Dialogs\CollegeStudent\" />
+    <Folder Include="Dialogs\Students\" />
+    <Folder Include="Dialogs\Teacher\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HiBot.Business\HiBot.Business.csproj">
       <Project>{bb4536ec-8164-4936-8443-46af46ce335f}</Project>

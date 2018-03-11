@@ -13,10 +13,8 @@ namespace HiBot
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-
           
             var config = GlobalConfiguration.Configuration;
-
 
             // dependency injection
             ContainerBuilder builder = new ContainerBuilder();

@@ -5,6 +5,8 @@ namespace HiBot.Constants
     {
         public static class StudentOptions
         {
+            public const string ToiLaHocSinh = "Tôi là Học Sinh";
+
             public const string TuVanThongTinCoBanVeTruong = "Thông tin về trường ĐH Vinh.";
             public const string TuVanVeKyThiTuyenSinhDaiHocSapToi = "Thông tin về kỳ thi tuyển sinh ĐH 2018.";
             public const string TuVanVeCacNganhNgheDaoTao = "Các ngành nghề đào tạo của trường.";
@@ -31,6 +33,8 @@ namespace HiBot.Constants
         }
         public static class CollegeStudentOptions
         {
+            public const string ToiLaSinhVien = "Tôi là Sinh Viên";
+
             public const string XemTinNhan = "Đọc tin nhắn.";
             public const string XemThongBao = "Đọc thông báo";
             public const string XemDiemMoiCo = "Xem điểm mới cập nhật.";
@@ -47,6 +51,9 @@ namespace HiBot.Constants
         }
         public static class TeachertOptions
         {
+
+            public const string ToiLaGiangVien = "Tôi là Giảng Viên";
+
             public const string XemTinNhan = "Đọc tin nhắn.";
             public const string XemThongBao = "Đọc thông báo";
 
