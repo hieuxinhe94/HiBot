@@ -1,10 +1,14 @@
-﻿using HiBot.Entities;
+﻿using System;
+using HiBot.Entities;
+using HiBot.Repository.EntityFramework;
 using HiBot.Repository.Interfaces;
 
 namespace HiBot.Repository
 {
-   public class StudentRepository : BaseRepository<Students>, IStudentRepository
+    [Serializable]
+    public class StudentRepository : BaseRepository<Students>, IStudentRepository
     {
         // implement more function
+       
     }
 }

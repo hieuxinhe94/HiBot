@@ -1,8 +1,11 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
+using System.Linq;
 using HiBot.Entities;
 
 namespace HiBot.Repository.EntityFramework
 {
+   [Serializable]
     public class HiBotDbContext : DbContext
     {
         public HiBotDbContext() : base(@"data source=localhost\SQLEXPRESS;
@@ -29,5 +32,28 @@ namespace HiBot.Repository.EntityFramework
         public DbSet<Students> Students { get; set; }
         public DbSet<Teachers> Teachers { get; set; }
         public DbSet<CollegeStudent> CollegeStudent { get; set; }
+
+        public void RollBack()
+        {
+            throw new System.NotImplementedException(); var changedEntries = this.ChangeTracker.Entries()
+                .Where(x => x.State != EntityState.Unchanged).ToList();
+
+            foreach (var entry in changedEntries)
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Modified:
+                        entry.CurrentValues.SetValues(entry.OriginalValues);
+                        entry.State = EntityState.Unchanged;
+                        break;
+                    case EntityState.Added:
+                        entry.State = EntityState.Detached;
+                        break;
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Unchanged;
+                        break;
+                }
+            }
+        }
     }
 }

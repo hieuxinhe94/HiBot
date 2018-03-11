@@ -2,24 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using HiBot.Business.Interfaces;
 using HiBot.Entities;
+using HiBot.Repository;
 using HiBot.Repository.Base;
 
 namespace HiBot.Business.Infrastructures
 {
+    [Serializable]
     public class StudentBusiness : IStudentBusiness
     {
         private readonly IRepository<Students> _studentRepository;
 
+         
         public StudentBusiness(IRepository<Students> studentRepository)
         {
-            _studentRepository = studentRepository;
+            _studentRepository = studentRepository ?? new  StudentRepository();
         }
 
-        public ICollection<Students> GetAll()
+        public async Task<ICollection<Students>> GetAll()
         {
-            return _studentRepository.TableNoTracking().ToList();
+            return  _studentRepository.TableNoTracking.ToList();
         }
 
         public ICollection<Students> GetByEpression(Expression<Func<Students, bool>> express)
@@ -29,12 +33,13 @@ namespace HiBot.Business.Infrastructures
 
         public Students GetSingle(int id)
         {
-            return _studentRepository.TableNoTracking().SingleOrDefault(t => t.Id == id);
+            return _studentRepository.GetById(id);
         }
 
         public int Add(Students student)
         {
-            return _studentRepository.AddSingle(student);
+             _studentRepository.Insert(student);
+            return 1;
         }
     }
 }

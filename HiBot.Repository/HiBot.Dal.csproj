@@ -50,8 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntityFramework\HiBotDbContext.cs" />
+    <Compile Include="EntityFramework\Mapping\StudentMap.cs" />
     <Compile Include="Infrastructure\ContextManagers.cs" />
-    <Compile Include="Infrastructure\HiBotContext.cs" />
+    <Compile Include="Infrastructure\HiBotRepositoryContext.cs" />
     <Compile Include="Migrations\201803100537423_FirstInit.cs" />
     <Compile Include="Migrations\201803100537423_FirstInit.Designer.cs">
       <DependentUpon>201803100537423_FirstInit.cs</DependentUpon>
@@ -61,7 +62,6 @@
     <Compile Include="Base\IPagination.cs" />
     <Compile Include="Base\IRepository.cs" />
     <Compile Include="Base\IRepositoryContext.cs" />
-    <Compile Include="EntityFramework\Mapping\StudentMap.cs" />
     <Compile Include="Infrastructure\LazyPagination.cs" />
     <Compile Include="Infrastructure\Paginations.cs" />
     <Compile Include="Interfaces\IStudentRepository.cs" />

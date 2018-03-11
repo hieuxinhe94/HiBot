@@ -9,24 +9,61 @@ namespace HiBot.Repository.Base
    public interface IRepository<T>
     {
         /// <summary>
-        /// Lấy một đối tượng bởi primary key hoặc biểu thức unique nào đó
+        /// Get entity by identifier
         /// </summary>
-        /// <param name="whereCondition"></param>
-        /// <returns></returns>
-        T GetSingle(Expression<Func<T,bool>> whereCondition );
+        /// <param name="id">Identifier</param>
+        /// <returns>Entity</returns>
+        T GetById(object id);
 
-        int AddSingle(T entity);
-        int AddMany(List<T> entities);
-        int Delete(T entity);
-        int UpdateSingle(T entity);
-        int UpdateMany(T entity);
-        IEnumerable<T> TableNoTracking();
-        IList<T> GetAll();
         /// <summary>
-        /// input param is T , return bool 
+        /// Insert entity
         /// </summary>
-        /// <param name="whereCondition"></param>
-        /// <returns></returns>
+        /// <param name="entity">Entity</param>
+        void Insert(T entity);
+
+        /// <summary>
+        /// Insert entities
+        /// </summary>
+        /// <param name="entities">Entities</param>
+        void Insert(IEnumerable<T> entities);
+
+        /// <summary>
+        /// Update entity
+        /// </summary>
+        /// <param name="entity">Entity</param>
+        void Update(T entity);
+
+        /// <summary>
+        /// Update entities
+        /// </summary>
+        /// <param name="entities">Entities</param>
+        void Update(IEnumerable<T> entities);
+
+        /// <summary>
+        /// Delete entity
+        /// </summary>
+        /// <param name="entity">Entity</param>
+        void Delete(T entity);
+
+        /// <summary>
+        /// Delete entities
+        /// </summary>
+        /// <param name="entities">Entities</param>
+        void Delete(IEnumerable<T> entities);
+
+        void Load();
+
+        IQueryable<T> FromSql(string sql, params object[] parameters);
+
+        /// <summary>
+        /// Gets a table
+        /// </summary>
+        IQueryable<T> Table { get; }
+
+        /// <summary>
+        /// Gets a table with "no tracking" enabled (EF feature) Use it only when you load record(s) only for read-only operations
+        /// </summary>
+        IQueryable<T> TableNoTracking { get; }
         IList<T> GetAll(Expression<Func<T,bool>> whereCondition);
         IQueryable<T> GetQueryable();
         long Count(Expression<Func<T, bool>> expression);

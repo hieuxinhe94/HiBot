@@ -2,109 +2,212 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
+using HiBot.Entities;
 using HiBot.Repository.Base;
 using HiBot.Repository.EntityFramework;
 using HiBot.Repository.Infrastructure;
 
 namespace HiBot.Repository
 {
-    public class BaseRepository<T> : IRepository<T> where T : class
+    [Serializable]
+    public class BaseRepository<T> : IRepository<T> where T : BaseEntities
     {
-        private HiBotDbContext hiBotDbContext;
-        public BaseRepository() : this(new HiBotContext())
+       
+        #region Fields
+        private readonly HiBotDbContext _context;
+        private DbSet<T> _entities;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets a table
+        /// </summary>
+        public virtual IQueryable<T> Table
         {
-             
+            get
+            {
+                return this.Entities;
+            }
         }
 
-        public BaseRepository(IRepositoryContext repositoryContext)
+        /// <summary>
+        /// Gets a table with "no tracking" enabled (EF feature) Use it only when you load record(s) only for read-only operations
+        /// </summary>
+        public virtual IQueryable<T> TableNoTracking
         {
-            repositoryContext = repositoryContext ?? new HiBotContext();
-            _objectSet = repositoryContext.GetObjectSet<T>();
+            get
+            {
+                return this.Entities.AsNoTracking();
+            }
         }
 
-        private IObjectSet<T> _objectSet;
-
-        public IObjectSet<T> ObjectSet
+        /// <summary>
+        /// Entities
+        /// </summary>
+        protected virtual DbSet<T> Entities
         {
-            get { return _objectSet; }
+            get
+            {
+                if (_entities == null)
+                    _entities = _context.Set<T>();
+                return _entities;
+            }
         }
 
-        #region IRepository Members
+        #endregion
 
-        public int Add(T entity)
+
+        public BaseRepository()
         {
-            this.ObjectSet.AddObject(entity);
-            
-            return 1;
+            _context = _context ??   new HiBotDbContext();
         }
 
-        public int AddMany(List<T> entities)
+
+        public virtual T GetById(object id)
         {
-            throw new NotImplementedException();
+            // mention suggest to optimazation
+            //http://stackoverflow.com/questions/11686225/dbset-find-method-ridiculously-slow-compared-to-singleordefault-on-id/11688189#comment34876113_11688189
+            return this.Entities.Find(id);
         }
 
-        public int Delete(T entity)
+        public virtual void Insert(T entity)
         {
-             this.ObjectSet.DeleteObject(entity);
-            return 1;
+            try
+            {
+                if (entity == null)
+                    throw new ArgumentNullException("entity");
+
+                this.Entities.Add(entity);
+
+                this._context.SaveChanges();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                _context.RollBack();
+                Console.WriteLine(dbEx.Message);
+                throw;
+            }
         }
 
-        public int UpdateSingle(T entity)
+        public virtual void Insert(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (entities == null)
+                    throw new ArgumentNullException("entities");
+
+                    this.Entities.AddRange(entities);
+
+                this._context.SaveChanges();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                throw;
+            }
         }
 
-        public int UpdateMany(T entity)
+        public void Update(T entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (entity == null)
+                    throw new ArgumentNullException("entity");
+
+                this.Entities.Attach(entity);
+                this._context.SaveChanges();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                throw;
+            }
         }
 
-        public IEnumerable<T> TableNoTracking()
+        public void Update(IEnumerable<T> entities)
         {
-            return ObjectSet;
+            try
+            {
+                if (entities == null)
+                    throw new ArgumentNullException("entities");
+
+                foreach (var item in entities)
+                {
+                    this.Entities.Attach(item);
+                }
+                this._context.SaveChanges();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                throw;
+            }
         }
 
-        public IList<T> GetAll()
+        public void Delete(T entity)
         {
-            return this.ObjectSet.ToList<T>();
+            try
+            {
+                if (entity == null)
+                    throw new ArgumentNullException("entity");
+                if (entity.Id < 0)
+                {
+                    return;
+                }
+                this.Entities.Remove(entity);
+
+                this._context.SaveChanges();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                throw new Exception(dbEx.Message);
+            }
         }
 
+        public void Delete(IEnumerable<T> entities)
+        {
+            try
+            {
+                if (entities == null)
+                    throw new ArgumentNullException("entities");
+
+                foreach (var entity in entities)
+                    this.Entities.Remove(entity);
+
+                this._context.SaveChanges();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                throw new Exception(dbEx.Message);
+            }
+        }
+
+        public void Load()
+        {
+            this._context.Set<T>();
+        }
+
+        public IQueryable<T> FromSql(string sql, params object[] parameters)
+        {
+            return this.Entities.SqlQuery(sql,parameters).AsQueryable();
+        }
+
+ 
         public IList<T> GetAll(Expression<Func<T, bool>> whereCondition)
-        =>
-            this.ObjectSet.Where(whereCondition).ToList();
-
-        public T GetSingle(Expression<Func<T, bool>> whereCondition)
         {
-            return this.ObjectSet.Where(whereCondition).FirstOrDefault<T>();
-        }
-
-        public int AddSingle(T entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Attach(T entity)
-        {
-            this.ObjectSet.Attach(entity);
+            return this.Entities.Where(whereCondition).ToList();
         }
 
         public IQueryable<T> GetQueryable()
         {
-            return this.ObjectSet.AsQueryable<T>();
+            return this.Entities.AsNoTracking();
         }
 
-        public long Count()
+        public long Count(Expression<Func<T, bool>> expression)
         {
-            return this.ObjectSet.LongCount<T>();
+            return this.Entities.AsNoTracking().Where(expression).Count();
         }
-
-        public long Count(Expression<Func<T, bool>> whereCondition)
-        {
-            return this.ObjectSet.Where(whereCondition).LongCount<T>();
-        }
-
-        #endregion
     }
 }

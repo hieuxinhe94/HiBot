@@ -3,7 +3,7 @@ using HiBot.Repository.Base;
 
 namespace HiBot.Repository.Infrastructure
 {
-    public class HiBotContext : IRepositoryContext
+    public class HiBotRepositoryContext : IRepositoryContext
     {
         private const string OBJECT_CONTEXT_KEY = "HiBot.Dal.EF.Entities";
         public IObjectSet<T> GetObjectSet<T>() where T : class

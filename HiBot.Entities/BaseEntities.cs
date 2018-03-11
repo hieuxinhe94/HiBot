@@ -3,6 +3,7 @@ using System;
 
 namespace HiBot.Entities
 {
+    [Serializable]
     public class BaseEntities
     {
         public int Id { get; set; }

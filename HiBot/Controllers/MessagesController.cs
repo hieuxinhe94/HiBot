@@ -1,8 +1,14 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Autofac;
+using HiBot.Dialogs;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Internals;
+using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Connector;
 
 namespace HiBot
@@ -10,15 +16,31 @@ namespace HiBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        private readonly ILifetimeScope _scope;
+        public MessagesController(ILifetimeScope scope)
+        {
+            SetField.NotNull(out this._scope, nameof(_scope), scope);
+        }
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
         /// </summary>
-        public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
+        /// 
+        /// // TODO: "service locator"
+
+        public async Task<HttpResponseMessage> Post([FromBody]Activity activity, CancellationToken token)
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, activity))
+                {
+                    //Func<IDialog<object>> makeRoot = () => _scope.Resolve<RootDialog>();
+                    //_scope.Resolve<Func<IDialog<object>>>(TypedParameter.From(makeRoot));
+                    //var postToBot = _scope.Resolve<IPostToBot>();
+                    //await postToBot.PostAsync(activity, token);
+                    var postToBot = scope.Resolve<IPostToBot>();
+                    await postToBot.PostAsync(activity, token);
+                }
             }
             else
             {
