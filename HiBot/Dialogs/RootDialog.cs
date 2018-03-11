@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using HiBot.Business.Infrastructures;
 using HiBot.Business.Interfaces;
 using HiBot.Entities;
-using HiBot.Midware;
-using HiBot.Repository;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
@@ -14,12 +11,12 @@ namespace HiBot.Dialogs
     public class RootDialog : IDialog<object>
     {
         [NonSerialized]
-        private IStudentBusiness _studentBusiness = new StudentBusiness(null);
+        public readonly IStudentBusiness _studentBusiness;
 
         public RootDialog(IStudentBusiness studentBusiness)
         {
-            // TODO : ISSUE : Cannot pass the dependency injection to here!!
-            _studentBusiness = studentBusiness ?? new StudentBusiness(null);
+            // Dependency injection
+            _studentBusiness = studentBusiness;
         }
 
         public Task StartAsync(IDialogContext context)
@@ -29,11 +26,12 @@ namespace HiBot.Dialogs
             return Task.CompletedTask;
         }
 
+        
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
             var activity = await result as Activity;
 
-            // add students to this session 
+            // why _studentBusiness is null when message call back
             _studentBusiness.Add(new Students(){ Id = 1,Name = "Student 01 ",Birthday = DateTime.Now + "", HighSchool = "",LastOnline = DateTime.Now, PhoneNumber = "123", Sex = true});
             
             // TODO : Implement some business rule to reply or forward to new dialog.
@@ -41,7 +39,7 @@ namespace HiBot.Dialogs
             // return our reply to the user
             await context.PostAsync($"You sent {activity.Text} which was {activity.Text.Length} characters");
 
-            context.Wait(MessageReceivedAsync);
+            
         }
     }
 }

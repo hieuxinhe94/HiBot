@@ -21,13 +21,13 @@ namespace HiBot
             // dependency injection
             ContainerBuilder builder = new ContainerBuilder();
             builder.RegisterModule(new DialogModule());
-            builder.RegisterModule(new HiBotModule());
+        
 
             builder
                 .RegisterType<RootDialog>()
                 .InstancePerDependency();
+            builder.RegisterModule(new HiBotModule());
 
-           
             // Register your Web API controllers.
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
             // OPTIONAL: Register the Autofac filter provider.

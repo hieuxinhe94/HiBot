@@ -16,10 +16,7 @@ namespace HiBot
         protected override void Load(ContainerBuilder builder)
         {
             
-            builder.RegisterType<RootDialog>().As<IDialog<object>>().InstancePerDependency();
-
-            //     builder.RegisterType<RootDialog>().InstancePerDependency();
-
+            
             builder.RegisterType<StudentBusiness>()
                 .Keyed<IStudentBusiness>(FiberModule.Key_DoNotSerialize)
                 .AsImplementedInterfaces()

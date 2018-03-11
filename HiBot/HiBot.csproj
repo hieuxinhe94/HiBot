@@ -117,6 +117,7 @@
   <ItemGroup>
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
+    <Content Include="Resources\Images\logo.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
