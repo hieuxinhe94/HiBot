@@ -5,5 +5,11 @@ The graduation Project of PHAM VAN HIEU at 2018 - Vinh University.
 
 
 Logo:
-#
-![alt text](https://github.com/hieuxinhe94/HiBot/blob/master/LogoMakr_2Vjcez.png)
+# 
+
+introduce
+![alt text](https://github.com/hieuxinhe94/HiBot/blob/master/intro_image.png)
+
+help learn english
+![alt text](https://github.com/hieuxinhe94/HiBot/blob/master/intro_image_2.png)
+
