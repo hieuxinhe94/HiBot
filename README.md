@@ -11,5 +11,5 @@ introduce
 ![alt text](https://github.com/hieuxinhe94/HiBot/blob/master/intro_image.png)
 
 help learn english
-![alt text]https://github.com/hieuxinhe94/HiBot/blob/master/intro_image_2.png)
+![alt text](https://github.com/hieuxinhe94/HiBot/blob/master/intro_image_2.png)
 
