@@ -117,7 +117,10 @@
   <ItemGroup>
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
+    <Content Include="Resources\Images\highschoolStudent.png" />
     <Content Include="Resources\Images\logo.png" />
+    <Content Include="Resources\Images\student.png" />
+    <Content Include="Resources\Images\teacher.jpg" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -127,11 +130,14 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constants\HiBotOptions.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Dialogs\CollegeStudent\CollegeMasterDialog.cs" />
     <Compile Include="Dialogs\Common\LearningEnglishDialog.cs" />
     <Compile Include="Dialogs\DialogSample.cs" />
     <Compile Include="Dialogs\Help\HelpDialog.cs" />
     <Compile Include="Dialogs\Common\IntroduceDialog.cs" />
     <Compile Include="Dialogs\Common\RootDialog.cs" />
+    <Compile Include="Dialogs\Students\StudentMasterDialog.cs" />
+    <Compile Include="Dialogs\Teacher\TeacherMasterDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -151,11 +157,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dialogs\CollegeStudent\" />
-    <Folder Include="Dialogs\Students\" />
-    <Folder Include="Dialogs\Teacher\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\HiBot.Business\HiBot.Business.csproj">
       <Project>{bb4536ec-8164-4936-8443-46af46ce335f}</Project>

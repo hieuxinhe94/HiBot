@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using HiBot.Constants;
+using HiBot.Dialogs.CollegeStudent;
 using HiBot.Dialogs.Common;
+using HiBot.Dialogs.Students;
+using HiBot.Dialogs.Teacher;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
@@ -16,7 +20,7 @@ namespace HiBot.Dialogs
     {
         public Task StartAsync(IDialogContext context)
         {
-            context.Wait(this.MessageReceivedAsync);
+            context.Wait(this.ShowOptionsAsync);
             return Task.CompletedTask;
         }
 
@@ -24,57 +28,91 @@ namespace HiBot.Dialogs
         {
             // event ivoke callback when user entered somethings
             var message = await result;
-            if (message.Text.ToLower().Contains("help") || message.Text.ToLower().Contains("support") || message.Text.ToLower().Contains("problem"))
-            {
-                await context.PostAsync("Say some things and wen can start learning english now.");
-                await context.Forward(new LearningEnglishDialog(), this.ResumeAfterSupportDialog, message, CancellationToken.None);
-            }
-            else
-            {
-                this.ShowOptions(context);
-            }
-        }
-
-        private void ShowOptions(IDialogContext context)
-        {
-            PromptDialog.Choice(context, this.OnOptionSelected,
-                new List<string>()
-                {
-                    HiBotOptions.TeachertOptions.ToiLaGiangVien,
-                    HiBotOptions.CollegeStudentOptions.ToiLaSinhVien,
-                    HiBotOptions.StudentOptions.ToiLaHocSinh
-                },
-                "What's your job ?", "This isn't a valid option, try again !", 4);
-        }
-
-
-        private async Task OnOptionSelected(IDialogContext context, IAwaitable<string> result)
-        {
-            try
-            {
-                string optionSelected = await result;
-
-                switch (optionSelected)
+                switch (message.Text)
                 {
                     case HiBotOptions.TeachertOptions.ToiLaGiangVien:
-                        // context.Call(new RootDialog(), this.ResumeAfterOptionDialog);
-                        break;
-
+                        {
+                            context.Call(new TeacherMasterDialog(), this.ResumeAfterOptionDialog);
+                            break;
+                        }
                     case HiBotOptions.CollegeStudentOptions.ToiLaSinhVien:
-                        //context.Call(new RootDialog(), this.ResumeAfterOptionDialog);
-                        break;
+                        {
+                            context.Call(new CollegeMasterDialog(), this.ResumeAfterOptionDialog);
+                            break;
+                        }
                     case HiBotOptions.StudentOptions.ToiLaHocSinh:
-                        //context.Call(new RootDialog(), this.ResumeAfterOptionDialog);
-                        break;
+                        {
+                            context.Call(new StudentMasterDialog(), this.ResumeAfterOptionDialog);
+                            break;
+                        }
+                    default:
+                        {
+                            await context.PostAsync("Choose valid options by click a button.");
+                            context.Wait(ShowOptionsAsync);
+                            return;
+                        }
                 }
-            }
-            catch (TooManyAttemptsException ex)
-            {
-                await context.PostAsync($"Ooops! Too many attempts :(. But don't worry, I'm handling that exception and you can try again!");
 
-                context.Wait(this.MessageReceivedAsync);
-            }
         }
+
+        private async Task ShowOptionsAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            // first time
+            var reply = context.MakeMessage();
+
+            reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+
+            List<Attachment> lstOptionsAttachments = new List<Attachment>()
+            {
+
+                GetThumbnailCard(
+                    HiBotOptions.StudentOptions.ToiLaHocSinh,
+                    HiBotOptions.StudentOptions.ToiLaHocSinhSubtitle,
+                    "",
+                    new CardImage(
+                        url:
+                        $"data:image/png; base64,{ Convert.ToBase64String(File.ReadAllBytes(HttpContext.Current.Server.MapPath("~/Resources/Images/highschoolStudent.png")))}"),
+                    new CardAction(ActionTypes.ImBack, "NEXT",
+                        value: HiBotOptions.StudentOptions.ToiLaHocSinh)),
+                GetThumbnailCard(
+                    HiBotOptions.CollegeStudentOptions.ToiLaSinhVien,
+                    HiBotOptions.CollegeStudentOptions.ToiLaSinhVienSubtitle,
+                    "",
+                    new CardImage(
+                        url:
+                        $"data:image/png; base64,{ Convert.ToBase64String(File.ReadAllBytes(HttpContext.Current.Server.MapPath("~/Resources/Images/student.png")))}"),
+                    new CardAction(ActionTypes.ImBack, "NEXT",
+                        value: HiBotOptions.CollegeStudentOptions.ToiLaSinhVien)),
+                GetThumbnailCard(
+                    HiBotOptions.TeachertOptions.ToiLaGiangVien,
+                    HiBotOptions.TeachertOptions.ToiLaGiangVienSubtitle,
+                    "",
+                    new CardImage(
+                        url:
+                        $"data:image/png; base64,{ Convert.ToBase64String(File.ReadAllBytes(HttpContext.Current.Server.MapPath("~/Resources/Images/teacher.jpg")))}"),
+                    new CardAction(ActionTypes.ImBack, "NEXT",
+                        value: HiBotOptions.TeachertOptions.ToiLaGiangVien)),
+            };
+            reply.Attachments = lstOptionsAttachments;
+            await context.PostAsync(reply);
+            // swich to MessageReceivedAsync
+            context.Wait(this.MessageReceivedAsync);
+        }
+
+        private static Attachment GetThumbnailCard(string title, string subtitle, string text, CardImage cardImage, CardAction cardAction)
+        {
+            var heroCard = new ThumbnailCard
+            {
+                Title = title,
+                Subtitle = subtitle,
+                Text = text,
+                Images = new List<CardImage>() { cardImage },
+                Buttons = new List<CardAction>() { cardAction },
+            };
+
+            return heroCard.ToAttachment();
+        }
+
 
         private async Task ResumeAfterSupportDialog(IDialogContext context, IAwaitable<object> result)
         {
