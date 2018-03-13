@@ -3,8 +3,11 @@ using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
 using HiBot.Dialogs;
+using HiBot.Dialogs.Common;
 using HiBot.Midware;
 using Microsoft.Bot.Builder.Dialogs.Internals;
+using Microsoft.Bot.Builder.Scorables;
+using Microsoft.Bot.Connector;
 
 namespace HiBot
 {
@@ -24,7 +27,17 @@ namespace HiBot
             builder
                 .RegisterType<RootDialog>()
                 .InstancePerDependency();
+
+            builder
+                .RegisterType<LearningEnglishDialog>()
+                .InstancePerDependency();
+
             builder.RegisterModule(new HiBotModule());
+
+            builder
+                .Register(c => new HelpDialog(c.Resolve<IDialogTask>()))
+                .As<IScorable<IActivity, double>>()
+                .InstancePerLifetimeScope();
 
             // Register your Web API controllers.
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());

@@ -127,6 +127,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constants\HiBotOptions.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Dialogs\Common\LearningEnglishDialog.cs" />
     <Compile Include="Dialogs\DialogSample.cs" />
     <Compile Include="Dialogs\Help\HelpDialog.cs" />
     <Compile Include="Dialogs\Common\IntroduceDialog.cs" />
@@ -134,6 +135,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Midware\ImageHelper.cs" />
+    <Compile Include="Midware\LanguageCheckingHelper.cs" />
     <Compile Include="Midware\ServiceResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

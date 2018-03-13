@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using HiBot.Constants;
+using HiBot.Dialogs.Common;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
@@ -25,7 +26,8 @@ namespace HiBot.Dialogs
             var message = await result;
             if (message.Text.ToLower().Contains("help") || message.Text.ToLower().Contains("support") || message.Text.ToLower().Contains("problem"))
             {
-                await context.Forward(new HelpDialog(), this.ResumeAfterSupportDialog, message, CancellationToken.None);
+                await context.PostAsync("Say some things and wen can start learning english now.");
+                await context.Forward(new LearningEnglishDialog(), this.ResumeAfterSupportDialog, message, CancellationToken.None);
             }
             else
             {

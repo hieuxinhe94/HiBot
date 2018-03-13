@@ -18,10 +18,10 @@ namespace HiBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-          readonly RootDialog rootDialog;
+        readonly RootDialog rootDialog;
 
         private readonly ILifetimeScope _scope;
-        
+
         public MessagesController(RootDialog _rootDialog)
         {
             rootDialog = _rootDialog;
@@ -39,7 +39,7 @@ namespace HiBot
             {
                 // first time call to root dialog, and this will be display options to start 
                 await Conversation.SendAsync(activity, () => this.rootDialog);
-            }   
+            }
             else
             {
                 // Xử lý các sự kiện hệ thống đối với cuộc trò chuyện như thêm người mới vào hộp thoại, người nào đó rời đi ....
@@ -68,20 +68,28 @@ namespace HiBot
                 {
                     foreach (var newMember in update.MembersAdded)
                     {
+                        List<CardImage> cardImages = new List<CardImage>();
+                        cardImages.Add(GetInlineAttachment());
+                        HeroCard plCard = new HeroCard()
+                        {
+                            Title = $"I am HiBot",
+                            Subtitle = "A chatbot is a computer program which conducts a conversation via auditory or textual methods. I was developed by HieuPham",
+                            Images = cardImages
+
+                        };
+
                         if (newMember.Id != message.Recipient.Id)
                         {
-                            attachment = GetInlineAttachment();
-
                             var reply = message.CreateReply();
-                            reply.Attachments = new List<Attachment>{attachment};
-                            reply.Text = $"Welcome {newMember.Name} is chatting with Hibot !\n";
+                            reply.Attachments = new List<Attachment> { plCard.ToAttachment() };
+                            reply.Text = $"Welcome {newMember.Name} !\n";
                             reply.Speak = "Hello";
                             client.Conversations.ReplyToActivityAsync(reply);
                         }
                     }
                 }
 
-               
+
 
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
@@ -102,17 +110,17 @@ namespace HiBot
 
         #region private method
 
-        private static Attachment GetInlineAttachment()
+        private static CardImage GetInlineAttachment()
         {
             var imagePath = HttpContext.Current.Server.MapPath("~/Resources/Images/logo.png");
 
             var imageData = Convert.ToBase64String(File.ReadAllBytes(imagePath));
 
-            return new Attachment
+            return new CardImage
             {
-                Name = "small-image.png",
-                ContentType = "image/png",
-                ContentUrl = $"data:image/png;base64,{imageData}"
+
+                Alt = "Welcome card",
+                Url = $"data:image/png;base64,{imageData}"
             };
         }
 

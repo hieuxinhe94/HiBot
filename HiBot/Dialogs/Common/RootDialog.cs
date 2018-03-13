@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HiBot.Business.Infrastructures;
 using HiBot.Business.Interfaces;
+using HiBot.Dialogs.Common;
 using HiBot.Entities;
 using HiBot.Midware;
 using HiBot.Repository;
@@ -42,14 +43,16 @@ namespace HiBot.Dialogs
             var activity = await result as Activity;
             if (activity.Text.ToLower().Contains("hi")|| activity.Text.ToLower().Contains("hello")|| activity.Text.ToLower().Contains("2"))
             {
-                // User said 'order', so invoke the New Order Dialog and wait for it to finish.
-                // Then, call ResumeAfterNewOrderDialog.
                 await context.Forward(new IntroduceDialog(), this.ResumeAfterIntroduceDialogComeBack, activity, CancellationToken.None);
+            }
+            else if (activity.Text.ToLower().Contains("learn english"))
+            {
+                await context.Forward(new LearningEnglishDialog(), this.ResumeAfterIntroduceDialogComeBack, activity, CancellationToken.None);
             }
             else
             {
                 await context.PostAsync($"Say Hi, Please !! ");
-                context.Wait(MessageReceivedAsync);
+               
             }
             //use context.Wait() to specify the callback to invoke the next time the user sends a message
             // not call any nonserializable class because, it will be null
