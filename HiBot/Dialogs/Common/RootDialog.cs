@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using HiBot.Business.Infrastructures;
 using HiBot.Business.Interfaces;
 using HiBot.Dialogs.Common;
-using HiBot.Entities;
-using HiBot.Midware;
-using HiBot.Repository;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 

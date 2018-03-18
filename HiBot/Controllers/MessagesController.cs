@@ -84,6 +84,7 @@ namespace HiBot
                             reply.Attachments = new List<Attachment> { plCard.ToAttachment() };
                             reply.Text = $"Welcome {newMember.Name} !\n";
                             reply.Speak = "Hello";
+                            reply.InputHint = InputHints.ExpectingInput;
                             client.Conversations.ReplyToActivityAsync(reply);
                         }
                     }

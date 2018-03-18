@@ -36,7 +36,8 @@ namespace HiBot.Repository.EntityFramework
 
         public void RollBack()
         {
-            throw new System.NotImplementedException(); var changedEntries = this.ChangeTracker.Entries()
+           
+            var changedEntries = this.ChangeTracker.Entries()
                 .Where(x => x.State != EntityState.Unchanged).ToList();
 
             foreach (var entry in changedEntries)

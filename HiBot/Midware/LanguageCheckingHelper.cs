@@ -35,7 +35,7 @@ namespace HiBot.Midware
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception  )
             {
                 // TODO : remove
             }

@@ -1,13 +1,11 @@
 ﻿using Autofac;
 using HiBot.Business.Infrastructures;
 using HiBot.Business.Interfaces;
-using HiBot.Dialogs;
 using HiBot.Entities;
 using HiBot.Repository;
 using HiBot.Repository.Base;
-using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Internals.Fibers;
- 
+
 
 namespace HiBot
 {

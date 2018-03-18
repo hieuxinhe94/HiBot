@@ -104,7 +104,7 @@ namespace HiBot.Repository
 
                 this._context.SaveChanges();
             }
-            catch (DbUpdateException dbEx)
+            catch (DbUpdateException  )
             {
                 throw;
             }

@@ -28,30 +28,34 @@ namespace HiBot.Dialogs
         {
             // event ivoke callback when user entered somethings
             var message = await result;
-                switch (message.Text)
-                {
-                    case HiBotOptions.TeachertOptions.ToiLaGiangVien:
-                        {
-                            context.Call(new TeacherMasterDialog(), this.ResumeAfterOptionDialog);
-                            break;
-                        }
-                    case HiBotOptions.CollegeStudentOptions.ToiLaSinhVien:
-                        {
-                            context.Call(new CollegeMasterDialog(), this.ResumeAfterOptionDialog);
-                            break;
-                        }
-                    case HiBotOptions.StudentOptions.ToiLaHocSinh:
-                        {
-                            context.Call(new StudentMasterDialog(), this.ResumeAfterOptionDialog);
-                            break;
-                        }
-                    default:
-                        {
-                            await context.PostAsync("Choose valid options by click a button.");
-                            context.Wait(ShowOptionsAsync);
-                            return;
-                        }
-                }
+            switch (message.Text)
+            {
+                case HiBotOptions.TeachertOptions.ToiLaGiangVien:
+                    {
+                        await context.Forward(new TeacherMasterDialog(), this.ResumeAfterOptionDialog, message, CancellationToken.None);
+                        break;
+                    }
+                case HiBotOptions.CollegeStudentOptions.ToiLaSinhVien:
+                    {
+
+                        await context.Forward(new CollegeMasterDialog(), this.ResumeAfterOptionDialog, message, CancellationToken.None);
+
+                        break;
+                    }
+                case HiBotOptions.StudentOptions.ToiLaHocSinh:
+                    {
+
+                        await context.Forward(new StudentMasterDialog(), this.ResumeAfterOptionDialog, message, CancellationToken.None);
+
+                        break;
+                    }
+                default:
+                    {
+                        await context.PostAsync("Choose valid options by click a button.");
+                        context.Wait(ShowOptionsAsync);
+                        return;
+                    }
+            }
 
         }
 
