@@ -18,13 +18,13 @@ namespace HiBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        readonly RootDialog rootDialog;
+        readonly RootLnuDialog rootDialog;
 
         private readonly ILifetimeScope _scope;
 
-        public MessagesController(RootDialog _rootDialog)
+        public MessagesController(RootLnuDialog _rootLnuDialog )
         {
-            rootDialog = _rootDialog;
+            rootDialog = _rootLnuDialog;
         }
         /// <summary>
         /// POST: api/Messages

@@ -4,6 +4,8 @@ using Autofac;
 using Autofac.Integration.WebApi;
 using HiBot.Dialogs;
 using HiBot.Dialogs.Common;
+using HiBot.Dialogs.Help;
+using HiBot.Dialogs.Students;
 using HiBot.Midware;
 using Microsoft.Bot.Builder.Dialogs.Internals;
 using Microsoft.Bot.Builder.Scorables;
@@ -22,7 +24,12 @@ namespace HiBot
             // dependency injection
             ContainerBuilder builder = new ContainerBuilder();
             builder.RegisterModule(new DialogModule());
-        
+
+            builder.Register((c, p) => new StudentServeyDialog()).AsSelf().InstancePerDependency();
+
+            builder
+                .RegisterType<RootLnuDialog>()
+                .InstancePerDependency();
 
             builder
                 .RegisterType<RootDialog>()
@@ -31,11 +38,14 @@ namespace HiBot
             builder
                 .RegisterType<LearningEnglishDialog>()
                 .InstancePerDependency();
+            builder
+                .RegisterType<HelpDialog>()
+                .InstancePerDependency();
 
             builder.RegisterModule(new HiBotModule());
 
             builder
-                .Register(c => new HelpDialog(c.Resolve<IDialogTask>()))
+                .Register(c => new HelpScorable(c.Resolve<IDialogTask>()))
                 .As<IScorable<IActivity, double>>()
                 .InstancePerLifetimeScope();
 

@@ -130,14 +130,16 @@
     <Compile Include="App_Start\RegexConstants.cs" />
     <Compile Include="App_Start\StudentServeyModuln.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Constants\HiBotIntents.cs" />
     <Compile Include="Constants\HiBotOptions.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\CollegeStudent\CollegeMasterDialog.cs" />
     <Compile Include="Dialogs\Common\LearningEnglishDialog.cs" />
-    <Compile Include="Dialogs\DialogSample.cs" />
     <Compile Include="Dialogs\Help\HelpDialog.cs" />
     <Compile Include="Dialogs\Common\IntroduceDialog.cs" />
     <Compile Include="Dialogs\Common\RootDialog.cs" />
+    <Compile Include="Dialogs\Help\HelpScorable.cs" />
+    <Compile Include="Dialogs\RootLnuDialog.cs" />
     <Compile Include="Dialogs\Students\StudentMasterDialog.cs" />
     <Compile Include="Dialogs\Students\StudentServeyDialog.cs" />
     <Compile Include="Dialogs\Teacher\TeacherMasterDialog.cs" />

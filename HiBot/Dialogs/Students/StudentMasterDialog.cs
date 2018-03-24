@@ -9,7 +9,7 @@ namespace HiBot.Dialogs.Students
     [Serializable]
     public class StudentMasterDialog : IDialog<object>
     {
-        private Entities.Students  CurrentStudent ;
+        private Entities.Students CurrentStudent;
 
         public Task StartAsync(IDialogContext context)
         {
@@ -25,18 +25,16 @@ namespace HiBot.Dialogs.Students
         }
         private async Task HandlerIntroduce(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-       
+
             var activity = await result as Activity;
-
             
-              await context.Forward(new StudentServeyDialog(), this.ResumeAfterIntroduceDialogComeBack, activity, CancellationToken.None);
-               context.Done(string.Empty);
-
+            await context.Forward(new StudentServeyDialog(), this.ResumeAfterIntroduceDialogComeBack, activity, CancellationToken.None);
+           
         }
 
         private Task ResumeAfterIntroduceDialogComeBack(IDialogContext context, IAwaitable<object> result)
         {
-           return Task.CompletedTask;
+            return Task.CompletedTask;
         }
     }
 }
