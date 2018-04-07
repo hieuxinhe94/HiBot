@@ -22,8 +22,14 @@ namespace HiBot.ViewModel
         [Pattern(RegexConstants.Phone)]
         public string PhoneNumber;
 
+        public static IForm<StudentServey> BuildForm()
+        {
+            return new FormBuilder<StudentServey>()
+                .Message("Welcome to the HiBot ")
+                .Build();
+        }
 
-      
+
     }
 
 

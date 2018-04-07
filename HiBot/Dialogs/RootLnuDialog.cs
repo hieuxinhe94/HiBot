@@ -44,27 +44,21 @@ namespace HiBot.Dialogs
         public async Task Greetings(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
         {
             var message = await activity;
-           
-            
-            await context.Forward(new IntroduceDialog(), this.ResumeAfterFormDialog, message, CancellationToken.None);
+            context.Call(new GreetingDialog(), Callback);
         }
-
+      
         [LuisIntent(HiBotIntents.learn_english)]
         public async Task LearnEnglishPlugIn(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
         {
             var message = await activity;
-          
-            await context.Forward(new LearningEnglishDialog(), this.ResumeAfterFormDialog, message, CancellationToken.None);
-            
+            context.Call(new LearningEnglishDialog(), Callback);
         }
 
         [LuisIntent(HiBotIntents.help)]
         public async Task Help(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
         {
             var message = await activity;
-         
-            await context.Forward(new HelpDialog(), this.ResumeAfterFormDialog, message, CancellationToken.None);
-            context.Done<object>(null);
+            context.Call(new HelpDialog(), Callback);
         }
 
         private async Task ResumeAfterFormDialog(IDialogContext context, IAwaitable<object> result)
@@ -94,5 +88,10 @@ namespace HiBot.Dialogs
                 context.Done<object>(null);
             }
         }
+        private async Task Callback(IDialogContext context, IAwaitable<object> result)
+        {
+            context.Wait(MessageReceived);
+        }
+
     }
 }
