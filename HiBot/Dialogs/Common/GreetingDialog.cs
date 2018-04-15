@@ -17,10 +17,10 @@ namespace HiBot.Dialogs.Common
             await context.PostAsync("Hi I'm Hi Bot");
             await Respond(context);
 
-            context.Wait(MessageReceivedAsync);
+           //
         }
 
-        private static async Task Respond(IDialogContext context)
+        private  async Task Respond(IDialogContext context)
         {
             var userName = String.Empty;
             context.UserData.TryGetValue<string>("Name", out userName);
@@ -28,10 +28,12 @@ namespace HiBot.Dialogs.Common
             {
                 await context.PostAsync("What is your name?");
                 context.UserData.SetValue<bool>("GetName", true);
+                context.Wait(MessageReceivedAsync);
             }
             else
             {
                 await context.PostAsync(String.Format("Hi {0}.  How can I help you today?", userName));
+                context.Done<object>("");
             }
         }
 
@@ -49,8 +51,6 @@ namespace HiBot.Dialogs.Common
                 context.UserData.SetValue<string>("Name", userName);
                 context.UserData.SetValue<bool>("GetName", false);
             }
-
-
             await Respond(context);
             context.Done(message);
         }

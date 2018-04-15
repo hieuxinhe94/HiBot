@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using HiBot.Entities;
+using HiBot.Repository.EntityFramework;
 using HiBot.ViewModel;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
@@ -34,6 +36,19 @@ namespace HiBot.Dialogs.Students
             try
             {
                 var survey = await result;
+
+                var student = new Entities.Students
+                {
+                    Name = survey.StudentName,
+                    HighSchool = survey.HighSchool,
+
+                    PhoneNumber = survey.PhoneNumber,
+                    Sex = (int)survey.Sex == 1 ? true : false
+                };
+                var db = new HiBotDbContext();
+                context.UserData.SetValue<Entities.Students>("current_student", student);
+                db.Students.Add(student);
+                db.SaveChangesAsync();
 
                 await context.PostAsync($"Thanks, Got it... {survey.StudentName} you've been  {survey.Birthday} years and use {survey.PhoneNumber}.");
             }

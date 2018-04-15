@@ -7,9 +7,7 @@ namespace HiBot.ViewModel
     [Serializable]
     public class StudentServey
     {
-
-     
-        [Prompt("Hello... What's your name?")]
+        [Prompt("Hello... What's your full name?")]
         public string StudentName;
 
         [Prompt(" How old are you ?, {StudentName}")]
@@ -21,6 +19,8 @@ namespace HiBot.ViewModel
         [Prompt("Can I have your phone number,  {StudentName} ?")]
         [Pattern(RegexConstants.Phone)]
         public string PhoneNumber;
+
+        public string HighSchool { get;  set; }
 
         public static IForm<StudentServey> BuildForm()
         {

@@ -32,20 +32,19 @@ namespace HiBot.Dialogs
             {
                 case HiBotOptions.TeachertOptions.ToiLaGiangVien:
                     {
-                        await context.Forward(new TeacherMasterDialog(), this.ResumeAfterOptionDialog, message, CancellationToken.None);
+                        context.Call(new TeacherMasterDialog(), this.ResumeAfterOptionDialog);
                         break;
                     }
                 case HiBotOptions.CollegeStudentOptions.ToiLaSinhVien:
                     {
-
-                        await context.Forward(new CollegeMasterDialog(), this.ResumeAfterOptionDialog, message, CancellationToken.None);
+                        context.Call(new CollegeMasterDialog(), this.ResumeAfterOptionDialog);
 
                         break;
                     }
                 case HiBotOptions.StudentOptions.ToiLaHocSinh:
                     {
-                       
-                        await context.Forward(new StudentMasterDialog(), this.ResumeAfterOptionDialog, message, CancellationToken.None);
+                      await context.PostAsync($"Chào bạn đến với cổng tư vấn thông tin tuyển sinh THPT quốc qua của ĐH Vinh.");
+                        context.Call(new StudentMasterDialog(), this.ResumeAfterOptionDialog);
 
                         break;
                     }
@@ -116,7 +115,6 @@ namespace HiBot.Dialogs
 
             return heroCard.ToAttachment();
         }
-
 
         private async Task ResumeAfterSupportDialog(IDialogContext context, IAwaitable<object> result)
         {
