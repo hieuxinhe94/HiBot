@@ -24,6 +24,8 @@ namespace HiBot
                 .Keyed<IRepository<Students>>(FiberModule.Key_DoNotSerialize)
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+
             base.Load(builder);
         }
     }

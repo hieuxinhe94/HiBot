@@ -1,75 +1,32 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Bot.Builder.Dialogs.Internals;
-using Microsoft.Bot.Builder.Internals.Fibers;
-using Microsoft.Bot.Builder.Scorables;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
 namespace HiBot.Dialogs
 {
     [Serializable]
-    public class HelpDialog : IScorable<IActivity, double>
+    public class HelpDialog : IDialog<object>
     {
-        private readonly IDialogTask task;
-
-        public HelpDialog(IDialogTask task)
+        public async Task StartAsync(IDialogContext context)
         {
-            SetField.NotNull(out this.task, nameof(task), task);
+            await context.PostAsync("This is the HelpDialog, this dialog contains infomation of chatbot usage.");
+
+            context.Wait(this.MessageReceived);
         }
 
-        public async Task<object> PrepareAsync(IActivity item, CancellationToken token)
+        private async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            var message = item as IMessageActivity;
+            var message = await result;
 
-            if (message != null && !string.IsNullOrWhiteSpace(message.Text))
+            if ((message.Text != null) && (message.Text.Trim().Length > 0))
             {
-                if (message.Text.Equals("settings", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return message.Text;
-                }
+                context.Done<object>(null);
             }
-
-            return null;
-        }
-
-        public bool HasScore(IActivity item, object state)
-        {
-            return state != null;
-        }
-
-        public double GetScore(IActivity item, object state)
-        {
-            bool matched = state != null;
-            var score = matched ? 1.0 : double.NaN;
-            return score;
-        }
-
-        public async Task PostAsync(IActivity item, object state, CancellationToken token)
-        {
-            var message = item as IMessageActivity;
-
-            if (message != null)
+            else
             {
-                var settingsDialog = new HelpDialog(this.task);
-
-                // wrap it with an additional dialog that will restart the wait for
-                // messages from the user once the child dialog has finished
-                //var interruption = settingsDialog.Void<object, IMessageActivity>();
-
-                //// put the interrupting dialog on the stack
-                //this.task.Call(interruption, null);
-
-                // start running the interrupting dialog
-                await this.task.PollAsync(token);
+                context.Fail(new Exception("Message was not a string or was an empty string."));
             }
-        }
-
-      
-
-        public  Task DoneAsync(IActivity item, object state, CancellationToken token)
-        {
-            return Task.CompletedTask;
         }
     }
 }

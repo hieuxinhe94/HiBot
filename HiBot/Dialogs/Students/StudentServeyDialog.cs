@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using HiBot.ViewModel;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
+using Microsoft.Bot.Connector;
 
 namespace HiBot.Dialogs.Students
 {
@@ -11,16 +12,19 @@ namespace HiBot.Dialogs.Students
     {
         public async Task StartAsync(IDialogContext context)
         {
-           
-            var form = new FormDialog<StudentServey>(new StudentServey(), BuildSurveyForm, FormOptions.PromptInStart);
-            context.Call(form, this.OnSurveyCompleted);
+ 
+            var form = new FormDialog<StudentServey>(new StudentServey(), BuildSurveyForm, FormOptions.PromptFieldsWithValues);
+
+            await Task.Run(() =>  context.Call(form, OnSurveyCompleted));
         }
+
+       
 
         private static IForm<StudentServey> BuildSurveyForm()
         {
             return new FormBuilder<StudentServey>()
-                .Message("I need some your infomation. Share it with me, please !")
-                
+                .Message("Welcome to the Student Servey. I need some your infomation. Share it with me, please !")
+                 
                 .AddRemainingFields()
                 .Build();
         }

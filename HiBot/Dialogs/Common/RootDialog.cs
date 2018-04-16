@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using HiBot.Business.Interfaces;
 using HiBot.Dialogs.Common;
+using HiBot.ViewModel;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Connector;
 
 namespace HiBot.Dialogs
@@ -17,6 +20,28 @@ namespace HiBot.Dialogs
 
         [NonSerialized]
         private readonly IStudentBusiness _studentBusiness;
+
+        //public static readonly IDialog<string> dialog = Chain.PostToChain()
+        //        .Select(msg => msg.Text)
+        //        .Switch(
+        //             new RegexCase<IDialog<string>>(new Regex("^hi", RegexOptions.IgnoreCase), (context, txt) =>
+        //             {
+        //                 return Chain.ContinueWith(new IntroduceDialog(), AfterGreetingContinuationAsync);
+        //             }),
+        //             new DefaultCase<string, IDialog<string>>((context, txt) =>
+        //             {
+        //                 return Chain.ContinueWith(FormDialog.FromForm(StudentServey.BuildForm, FormOptions.PromptInStart), AfterGreetingContinuationAsync);
+        //             }))
+        // .Unwrap()
+        // .PostToUser();
+
+        //private static async Task<IDialog<string>> AfterGreetingContinuationAsync(IBotContext context, IAwaitable<object> item)
+        //{
+        //    var token = await item;
+        //    var name = "User";
+        //    context.UserData.TryGetValue<string>("Name", out name);
+        //    return Chain.Return($"Thank you for using the bot: {name}");
+        //}
 
         public RootDialog(IStudentBusiness studentBusiness)
         {

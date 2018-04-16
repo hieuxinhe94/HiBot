@@ -12,24 +12,24 @@ namespace HiBot.ViewModel
         [Prompt("Hello... What's your name?")]
         public string StudentName;
 
-        [Prompt(" How old are you ?, {Name}")]
+        [Prompt(" How old are you ?, {StudentName}")]
         public int Birthday;
 
         [Prompt("Which sex you are ? Boy or girl? ")]
         public SEX Sex;
 
-        [Prompt("Can I have your phone number,  {Name} ?")]
+        [Prompt("Can I have your phone number,  {StudentName} ?")]
         [Pattern(RegexConstants.Phone)]
         public string PhoneNumber;
 
+        public static IForm<StudentServey> BuildForm()
+        {
+            return new FormBuilder<StudentServey>()
+                .Message("Welcome to the HiBot ")
+                .Build();
+        }
 
-        //public static IForm<StudentServey> BuildOrderForm()
-        //{
-        //    return new FormBuilder<StudentServey>()
-        //        .Field(nameof(Name))
-        //        .Build();
 
-        //}
     }
 
 
