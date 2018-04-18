@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using HiBot.Entities;
+using HiBot.Repository.EntityFramework;
 using HiBot.ViewModel;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
@@ -12,32 +15,42 @@ namespace HiBot.Dialogs.Students
     {
         public async Task StartAsync(IDialogContext context)
         {
- 
+
             var form = new FormDialog<StudentServey>(new StudentServey(), BuildSurveyForm, FormOptions.PromptFieldsWithValues);
 
-            await Task.Run(() =>  context.Call(form, OnSurveyCompleted));
+            await Task.Run(() => context.Call(form, OnSurveyCompleted));
+
         }
-
-       
-
-        private static IForm<StudentServey> BuildSurveyForm()
+            private static IForm<StudentServey> BuildSurveyForm()
         {
+            
             return new FormBuilder<StudentServey>()
-                .Message("Welcome to the Student Servey. I need some your infomation. Share it with me, please !")
-                 
+                .Message("Chào mừng bạn đến với cuộc khảo sát ngắn, Một số thông tin cụ thể sẻ giúp tôi dễ dàng tư vấn chính xác cho bạn !")
                 .AddRemainingFields()
                 .Build();
         }
 
         private async Task OnSurveyCompleted(IDialogContext context, IAwaitable<StudentServey> result)
         {
+            var survey = await result;
             try
             {
-                var survey = await result;
+             
+                //var student = new StudentsViewModel
+                //{
+                //    Name = survey.StudentName,
+                  
+                //    PhoneNumber = survey.PhoneNumber,
+                //    Sex = (int)survey.Sex == 1 ? true : false
+                //};
+                //var db = new HiBotDbContext();
+                //context.UserData.SetValue<StudentsViewModel>("current_student", student);
+                //db.Students.Add(student);
+             //   await db.SaveChangesAsync();
 
-                await context.PostAsync($"Thanks, Got it... {survey.StudentName} you've been  {survey.Birthday} years and use {survey.PhoneNumber}.");
+                await context.PostAsync($"Cảm ơn, Vui lòng xác nhận {survey.StudentName} :  {survey.Birthday} tuổi, điện thoại {survey.PhoneNumber}. Tôi có thể giúp gì cho bạn ?");
             }
-            catch (FormCanceledException<StudentServey> e)
+            catch (Exception e)
             {
                 string reply;
 
@@ -52,8 +65,9 @@ namespace HiBot.Dialogs.Students
 
                 await context.PostAsync(reply);
             }
-
-            context.Done(string.Empty);
+           
+            context.Done<object>(null);
         }
+       
     }
 }

@@ -32,21 +32,19 @@ namespace HiBot.Dialogs
             {
                 case HiBotOptions.TeachertOptions.ToiLaGiangVien:
                     {
-                        await context.Forward(new TeacherMasterDialog(), this.ResumeAfterOptionDialog, message, CancellationToken.None);
+                        context.Call(new TeacherMasterDialog(), this.ResumeAfterOptionDialog);
                         break;
                     }
                 case HiBotOptions.CollegeStudentOptions.ToiLaSinhVien:
                     {
-
-                        await context.Forward(new CollegeMasterDialog(), this.ResumeAfterOptionDialog, message, CancellationToken.None);
-
+                        context.Call(new CollegeMasterDialog(), this.ResumeAfterOptionDialog);
                         break;
                     }
                 case HiBotOptions.StudentOptions.ToiLaHocSinh:
                     {
-                       
+                        await context.PostAsync($"Chào mừng đến với cổng tư vấn thông tin tuyển sinh THPT quốc qua của ĐH Vinh. Đây có phải là vấn đề bạn quan tâm không? ");
                         await context.Forward(new StudentMasterDialog(), this.ResumeAfterOptionDialog, message, CancellationToken.None);
-
+                       
                         break;
                     }
                 default:
@@ -117,7 +115,6 @@ namespace HiBot.Dialogs
             return heroCard.ToAttachment();
         }
 
-
         private async Task ResumeAfterSupportDialog(IDialogContext context, IAwaitable<object> result)
         {
             var ticketNumber = await result;
@@ -128,18 +125,9 @@ namespace HiBot.Dialogs
 
         private async Task ResumeAfterOptionDialog(IDialogContext context, IAwaitable<object> result)
         {
-            try
-            {
-                var message = await result;
-            }
-            catch (Exception ex)
-            {
-                await context.PostAsync($"Failed with message: {ex.Message}");
-            }
-            finally
-            {
-                context.Wait(this.MessageReceivedAsync);
-            }
+            var message = await result;
+            context.Wait(this.MessageReceivedAsync);
+             
         }
     }
 }

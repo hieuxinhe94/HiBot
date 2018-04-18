@@ -7,21 +7,20 @@ namespace HiBot.ViewModel
     [Serializable]
     public class StudentServey
     {
-
-     
-        [Prompt("Hello... What's your name?")]
+        [Prompt("Cho tôi biết tên đầy đủ của bạn")]
         public string StudentName;
 
-        [Prompt(" How old are you ?, {StudentName}")]
+        [Prompt(" Bạn bao nhiêu tuổi ?, {StudentName}")]
         public int Birthday;
 
-        [Prompt("Which sex you are ? Boy or girl? ")]
+        [Prompt("Nam / Nữ? ")]
         public SEX Sex;
 
-        [Prompt("Can I have your phone number,  {StudentName} ?")]
-        [Pattern(RegexConstants.Phone)]
+        [Prompt("Cho tôi biết số điện thoại của bạn để có thể thông báo khi có thông tin mới,  {StudentName} ?")]
+        //[Pattern(RegexConstants.Phone)]
         public string PhoneNumber;
 
+      
         public static IForm<StudentServey> BuildForm()
         {
             return new FormBuilder<StudentServey>()
@@ -36,9 +35,9 @@ namespace HiBot.ViewModel
 
     public enum SEX
     {
-        [Terms("Wommen", "Girl")]
+        [Terms("Nữ", "Girl","1","G")]
         Girl = 1,
-        [Terms("Man", "Boy")]
+        [Terms("Nam", "Trai","2","T")]
         Boy = 2
     }
 }

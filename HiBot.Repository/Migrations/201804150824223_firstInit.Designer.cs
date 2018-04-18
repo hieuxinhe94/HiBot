@@ -7,13 +7,13 @@ namespace HiBot.Repository.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class FirstInit : IMigrationMetadata
+    public sealed partial class firstInit : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(FirstInit));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(firstInit));
         
         string IMigrationMetadata.Id
         {
-            get { return "201803100537423_FirstInit"; }
+            get { return "201804150824223_firstInit"; }
         }
         
         string IMigrationMetadata.Source

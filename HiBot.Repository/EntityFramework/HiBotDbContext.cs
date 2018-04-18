@@ -22,6 +22,7 @@ namespace HiBot.Repository.EntityFramework
             modelBuilder.Entity<Students>().ToTable("Students");
             modelBuilder.Entity<Teachers>().ToTable("Teachers");
             modelBuilder.Entity<CollegeStudent>().ToTable("CollegeStudent");
+            modelBuilder.Entity<HistoryMissUnderstand>().ToTable("HistoryMissUnderstand");
 
 
             base.OnModelCreating(modelBuilder);
@@ -29,6 +30,7 @@ namespace HiBot.Repository.EntityFramework
 
         }
 
+        public DbSet<HistoryMissUnderstand> HistoryMissUnderstand { get; set; }
 
         public DbSet<Students> Students { get; set; }
         public DbSet<Teachers> Teachers { get; set; }

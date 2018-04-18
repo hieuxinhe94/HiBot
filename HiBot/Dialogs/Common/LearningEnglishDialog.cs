@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using HiBot.Constants;
 using HiBot.Midware;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
@@ -73,10 +74,25 @@ namespace HiBot.Dialogs.Common
             }
             else
             {
-                await context.PostAsync("All right,Good Job");
+                var userName = String.Empty;
+                context.UserData.TryGetValue<string>("Name", out userName);
+
+                var englishStep = 0;
+                context.UserData.TryGetValue<int>("step", out englishStep);
+                if (englishStep < 3)
+                {
+                    englishStep++;
+                    context.UserData.SetValue<int>("step", englishStep);
+                    await context.PostAsync($" {userName}, " + (englishStep == 1 ? HiBotOptions.LearnEnglishTopics.What_about_you : HiBotOptions.LearnEnglishTopics.Can_you_talk_about_your_job));
+                }
+                else
+                {
+                    englishStep++;
+                    context.UserData.SetValue<int>("step", englishStep);
+                    await context.PostAsync($"Great, {userName}!, What's else?");
+                }
             }
             context.Wait(TalkRecieveAsync);
-
         }
     }
 
