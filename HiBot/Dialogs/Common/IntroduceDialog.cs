@@ -38,14 +38,13 @@ namespace HiBot.Dialogs
                 case HiBotOptions.CollegeStudentOptions.ToiLaSinhVien:
                     {
                         context.Call(new CollegeMasterDialog(), this.ResumeAfterOptionDialog);
-
                         break;
                     }
                 case HiBotOptions.StudentOptions.ToiLaHocSinh:
                     {
-                      await context.PostAsync($"Chào bạn đến với cổng tư vấn thông tin tuyển sinh THPT quốc qua của ĐH Vinh.");
-                        context.Call(new StudentMasterDialog(), this.ResumeAfterOptionDialog);
-
+                        await context.PostAsync($"Chào mừng đến với cổng tư vấn thông tin tuyển sinh THPT quốc qua của ĐH Vinh. Đây có phải là vấn đề bạn quan tâm không? ");
+                        await context.Forward(new StudentMasterDialog(), this.ResumeAfterOptionDialog, message, CancellationToken.None);
+                       
                         break;
                     }
                 default:
@@ -126,18 +125,9 @@ namespace HiBot.Dialogs
 
         private async Task ResumeAfterOptionDialog(IDialogContext context, IAwaitable<object> result)
         {
-            try
-            {
-                var message = await result;
-            }
-            catch (Exception ex)
-            {
-                await context.PostAsync($"Failed with message: {ex.Message}");
-            }
-            finally
-            {
-                context.Wait(this.MessageReceivedAsync);
-            }
+            var message = await result;
+            context.Wait(this.MessageReceivedAsync);
+             
         }
     }
 }

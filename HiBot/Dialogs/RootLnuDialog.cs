@@ -69,7 +69,7 @@ namespace HiBot.Dialogs
                 var missUnderstandUtterance = string.Empty;
                 context.UserData.TryGetValue<string>("miss_understand_sentences", out missUnderstandUtterance);
 
-                if (stateOfWaitForTeaching && string.IsNullOrWhiteSpace(missUnderstandUtterance))
+                if (stateOfWaitForTeaching && !string.IsNullOrWhiteSpace(missUnderstandUtterance))
                 {
                     // insert into inmemory db to learn
 
@@ -81,6 +81,8 @@ namespace HiBot.Dialogs
                     });
 
                     string message = $"Thanks {userName} very much, No one can perfect and I need learning every day.";
+                    context.UserData.SetValue<bool>("is_waiting_for_teaching", false);
+                    context.UserData.SetValue<string>("miss_understand_sentences", string.Empty);
                     await context.PostAsync(message);
                 }
                 else
@@ -92,6 +94,7 @@ namespace HiBot.Dialogs
                     await context.PostAsync(message);
 
                     context.UserData.SetValue<bool>("is_waiting_for_teaching", true);
+                    context.UserData.SetValue<string>("miss_understand_sentences", msg.Text);
                 }
             }
 
@@ -178,6 +181,7 @@ namespace HiBot.Dialogs
         {
             var message = await activity;
         }
+
         [LuisIntent(HiBotIntents.joking)]
         public async Task Joking(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
         {
@@ -186,6 +190,7 @@ namespace HiBot.Dialogs
 
             context.Wait(MessageReceived);
         }
+
         [LuisIntent(HiBotIntents.swear)]
         public async Task Swear(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
         {
@@ -203,12 +208,14 @@ namespace HiBot.Dialogs
                 context.Wait(MessageReceived);
             }
         }
+
         [LuisIntent(HiBotIntents.student)]
         public async Task IAmStudent(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
         {
             var message = await activity;
             await context.Forward(new StudentMasterDialog(), this.Callback, message, CancellationToken.None);
         }
+
         [LuisIntent(HiBotIntents.Places_CheckAreaTraffic)]
         public async Task PlacesCheckAreaTraffic(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
         {

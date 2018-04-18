@@ -53,9 +53,9 @@
     <Compile Include="EntityFramework\Mapping\StudentMap.cs" />
     <Compile Include="Infrastructure\ContextManagers.cs" />
     <Compile Include="Infrastructure\HiBotRepositoryContext.cs" />
-    <Compile Include="Migrations\201803100537423_FirstInit.cs" />
-    <Compile Include="Migrations\201803100537423_FirstInit.Designer.cs">
-      <DependentUpon>201803100537423_FirstInit.cs</DependentUpon>
+    <Compile Include="Migrations\201804150824223_firstInit.cs" />
+    <Compile Include="Migrations\201804150824223_firstInit.Designer.cs">
+      <DependentUpon>201804150824223_firstInit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repository\BaseRepository.cs" />
@@ -79,8 +79,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201803100537423_FirstInit.resx">
-      <DependentUpon>201803100537423_FirstInit.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201804150824223_firstInit.resx">
+      <DependentUpon>201804150824223_firstInit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

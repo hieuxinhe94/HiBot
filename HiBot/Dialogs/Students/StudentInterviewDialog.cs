@@ -11,20 +11,19 @@ namespace HiBot.Dialogs.Students
     {
         public async Task StartAsync(IDialogContext context)
         {
- 
+
             var form = new FormDialog<StudentInterviewServey>(new StudentInterviewServey(), BuildSurveyForm, FormOptions.PromptFieldsWithValues);
 
-            await Task.Run(() =>  context.Call(form, OnSurveyCompleted));
+            await Task.Run(() => context.Call(form, OnSurveyCompleted));
         }
-
-       
-
+         
         private static IForm<StudentInterviewServey> BuildSurveyForm()
         {
             return new FormBuilder<StudentInterviewServey>()
                 .Message("Cảm ơn sự quan tâm của bạn, bạn hãy cung cấp một số thông tin về học lực để được tư vấn chính xác hơn nhé.")
-                 
+
                 .AddRemainingFields()
+                
                 .Build();
         }
 
@@ -33,17 +32,17 @@ namespace HiBot.Dialogs.Students
             try
             {
                 var interview = await result;
-                Entities.Students currentStudent = null;
-                context.UserData.TryGetValue<Entities.Students>("current_student", out currentStudent);
+                StudentsViewModel currentStudent = null;
+                context.UserData.TryGetValue<StudentsViewModel>("current_student", out currentStudent);
 
                 currentStudent.DiemExpect = interview.Diem;
                 currentStudent.Khoi = interview.Khoi;
 
-                context.UserData.SetValue<Entities.Students>("current_student", currentStudent);
+                context.UserData.SetValue<StudentsViewModel>("current_student", currentStudent);
 
                 // analysis
-                
-                await context.PostAsync($"Thanks, Tôi đã nhận được thông tin của bạn, tôi có một số gợi ý như sau: ");
+
+               //await context.PostAsync($"Thanks, Tôi đã nhận được thông tin của bạn, tôi có một số gợi ý như sau: ");
             }
             catch (FormCanceledException<StudentServey> e)
             {

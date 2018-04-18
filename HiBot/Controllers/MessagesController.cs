@@ -66,6 +66,7 @@ namespace HiBot
                 var client = new ConnectorClient(new Uri(message.ServiceUrl), new MicrosoftAppCredentials());
                 if (update.MembersAdded != null && update.MembersAdded.Any())
                 {
+                   
                     foreach (var newMember in update.MembersAdded)
                     {
                         List<CardImage> cardImages = new List<CardImage>();
