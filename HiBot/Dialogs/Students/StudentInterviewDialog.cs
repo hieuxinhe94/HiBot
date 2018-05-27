@@ -32,7 +32,7 @@ namespace HiBot.Dialogs.Students
             try
             {
                 var interview = await result;
-                StudentsViewModel currentStudent = null;
+                StudentsViewModel currentStudent = new StudentsViewModel();
                 context.UserData.TryGetValue<StudentsViewModel>("current_student", out currentStudent);
 
                 currentStudent.DiemExpect = interview.Diem;
@@ -40,7 +40,7 @@ namespace HiBot.Dialogs.Students
 
                 context.UserData.SetValue<StudentsViewModel>("current_student", currentStudent);
 
-                // analysis
+                 
 
                //await context.PostAsync($"Thanks, Tôi đã nhận được thông tin của bạn, tôi có một số gợi ý như sau: ");
             }

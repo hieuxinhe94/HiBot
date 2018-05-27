@@ -79,11 +79,11 @@ namespace HiBot.Dialogs.Common
 
                 var englishStep = 0;
                 context.UserData.TryGetValue<int>("step", out englishStep);
-                if (englishStep < 3)
+                if (englishStep < 2)
                 {
                     englishStep++;
                     context.UserData.SetValue<int>("step", englishStep);
-                    await context.PostAsync($" {userName}, " + (englishStep == 1 ? HiBotOptions.LearnEnglishTopics.What_about_you : HiBotOptions.LearnEnglishTopics.Can_you_talk_about_your_job));
+                    await context.PostAsync($" Good !, " + (englishStep == 1 ? HiBotOptions.LearnEnglishTopics.What_about_you : HiBotOptions.LearnEnglishTopics.Can_you_talk_about_your_job));
                 }
                 else
                 {

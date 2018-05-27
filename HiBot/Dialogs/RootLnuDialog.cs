@@ -171,7 +171,7 @@ namespace HiBot.Dialogs
             string message = $"Hi {userName}, I'm Hibot.";
             await context.PostAsync(message);
 
-            message = $"I'm developed by HieuPham.";
+            message = $" HiBot là dự án dựa research về ChatBot với ý tưởng là hệ thống trả lời tin nhắn tự động trong trường đại học.";
             await context.PostAsync(message);
 
             context.Wait(MessageReceived);

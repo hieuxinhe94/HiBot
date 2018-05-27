@@ -38,7 +38,8 @@ namespace HiBot
             if (activity.Type == ActivityTypes.Message)
             {
                 // first time call to root dialog, and this will be display options to start 
-                await Conversation.SendAsync(activity, () => this.rootDialog);
+              await Conversation.SendAsync(activity, () => this.rootDialog);
+                
             }
             else
             {
@@ -73,8 +74,8 @@ namespace HiBot
                         cardImages.Add(GetInlineAttachment());
                         HeroCard plCard = new HeroCard()
                         {
-                            Title = $"I am HiBot",
-                            Subtitle = "A chatbot is a computer program which conducts a conversation via auditory or textual methods. I was developed by HieuPham",
+                            Title = $"Hi, I'm HiBot",
+                            Subtitle = "I was developed by HieuPham. Welcome you to the graduate events of Infomation Technology department in Vinh University ",
                             Images = cardImages
 
                         };

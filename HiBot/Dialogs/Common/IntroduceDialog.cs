@@ -37,7 +37,8 @@ namespace HiBot.Dialogs
                     }
                 case HiBotOptions.CollegeStudentOptions.ToiLaSinhVien:
                     {
-                        context.Call(new CollegeMasterDialog(), this.ResumeAfterOptionDialog);
+                        await context.PostAsync($"Chào mừng đến với hệ thống quản lý sinh viên trường đại học. ");
+                        await  context.Forward(new CollegeMasterDialog(), this.ResumeAfterOptionDialog ,message, CancellationToken.None);
                         break;
                     }
                 case HiBotOptions.StudentOptions.ToiLaHocSinh:

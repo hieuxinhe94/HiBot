@@ -15,7 +15,10 @@
         public const string Places_CheckAreaTraffic = "Places.CheckAreaTraffic";
 
         public const string joking = "joking";
-        public const string swear = "swear"; 
+        public const string swear = "swear";
+
+        public const string student_about = "student_about";
+
 
         public static class HighSchoolStudent
         {

@@ -1,25 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI;
+using HiBot.ViewModel;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Connector;
 
 namespace HiBot.Dialogs.CollegeStudent
 {
     [Serializable]
-    public class CollegeMasterDialog :  IDialog<object>
+    public class CollegeMasterDialog : IDialog<object>
     {
         public Task StartAsync(IDialogContext context)
         {
-        
-            context.Wait(this.HandlerLoginAsync);
+
+            context.Wait(this.HandlerIntroduce);
             return Task.CompletedTask;
         }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-          context.Wait(MessageReceivedAsync);
+
+            var activity = await result as Activity;
+            await context.PostAsync($"Oh, Nhận 10 điểm và gửi lời chúc của tôi tới các bạn của bạn nhé!");
+            context.Done<string>(null);
         }
         private static Attachment GetStudentSigninCard()
         {
@@ -32,14 +38,48 @@ namespace HiBot.Dialogs.CollegeStudent
 
             return signinCard.ToAttachment();
         }
+        private async Task HandlerIntroduce(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            var activity = await result as Activity;
+            
+            await context.Forward(new CollegeStudentInterviewDialog(), this.HandlerInterview, activity, CancellationToken.None);
+ 
+        }
 
+
+
+        public async Task HandlerInterview(IDialogContext context, IAwaitable<object> argument)
+        {
+            var message = await argument;
+            var studentName = String.Empty;
+            var studentId = String.Empty;
+            var current_college_student = new CollegeStudentViewModel();
+            context.UserData.TryGetValue<CollegeStudentViewModel>("current_college_student", out current_college_student);
+
+            var date = DateTime.Now.ToShortDateString();
+
+            if (current_college_student.StudentName.Equals("135D4802010245"))
+            {
+                if (DateTime.Now.ToShortDateString().Equals("05/28/2018"))
+                {
+                    await context.PostAsync($"Oh, Hi {current_college_student.StudentName}, Hôm nay bạn có buổi bảo vệ đồ án tốt nghiệp. ");
+                    await context.PostAsync($"Mọi chuyện sao rồi ?");
+                }
+            }
+            else
+            {
+                await context.PostAsync($"xin chào {current_college_student.StudentName}, Tôi đang kiểm tra xem có thông tin gì mới cho bạn... ");
+            }
+
+            context.Wait(MessageReceivedAsync);
+        }
 
         public ResumeAfter<string> HandlerLoginAfterSignInAsync() => throw new Exception("Don't know resumeAfter ");
-        
+
 
         private async Task HandlerLoginAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-             await context.PostAsync("Hey Student, send you a login card");
+            await context.PostAsync("Hey Student, send you a login card");
             var reply = context.MakeMessage();
 
             reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
@@ -48,9 +88,7 @@ namespace HiBot.Dialogs.CollegeStudent
                 GetStudentSigninCard ()
             };
 
-            await context.PostAsync(reply);
-            PromptDialog.Text(context, HandlerLoginAfterSignInAsync(), "We are sorry, this function isn't completed now, Can you give me your Id ", "Input your student ID, please", 3);
-
+            await context.PostAsync(reply); 
             context.Wait(MessageReceivedAsync);
         }
 
